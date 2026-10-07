@@ -4,6 +4,15 @@ from functools import wraps
 
 
 def timed_logged(function):
+    """Измеряет время выполнения функции и записывает результат или ошибку.
+
+    Args:
+        function (Callable): Функция, которую нужно обернуть декоратором.
+
+    Returns:
+        Callable: Обёрнутая функция с измерением времени выполнения.
+    """
+
     @wraps(function)
     def wrapper(*arguments, **named_arguments):
         start_time = time.perf_counter()
