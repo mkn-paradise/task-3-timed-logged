@@ -5,5 +5,5 @@
 ## Запуск
 
 ```bash
-cd task_3
+cd task3
 python main.py
