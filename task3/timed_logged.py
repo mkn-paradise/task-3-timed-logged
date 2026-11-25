@@ -16,22 +16,23 @@ def timed_logged(function):
     @wraps(function)
     def wrapper(*arguments, **named_arguments):
         start_time = time.perf_counter()
+        error = None
 
         try:
             result = function(*arguments, **named_arguments)
-
-        except Exception as error:
+        except Exception as caught_error:
+            error = caught_error
+        finally:
             elapsed_time = (time.perf_counter() - start_time) * 1000
 
-            logging.exception(
+        if error is not None:
+            logging.error(
                 f"Ошибка в функции {function.__name__}: "
                 f"{type(error).__name__}: {error}. "
-                f"Время выполнения: {elapsed_time:.2f} мс"
+                f"Время выполнения: {elapsed_time:.2f} мс",
+                exc_info=(type(error), error, error.__traceback__),
             )
-
-            raise
-
-        elapsed_time = (time.perf_counter() - start_time) * 1000
+            raise error
 
         print(
             f"Функция: {function.__name__}; "
